@@ -5,4 +5,4 @@ Contributor:
 - Falih Taufiqul Hakim
 - Thomas Santoso
 - Alvidhatul Adzhiva
-- Muhammad Rifki
+- Rifki Maulana Syarif
