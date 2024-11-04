@@ -1,10 +1,10 @@
 
-void setupArduino() {
+void setup() {
   Serial.begin(9600);
   setupMotorPins();
 }
 
-void loopArduino() {
+void loop() {
   if (Serial.available() > 0) {
     String commandStr = Serial.readStringUntil('\n');
     int command = commandStr.toInt();
