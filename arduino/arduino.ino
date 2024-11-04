@@ -1,13 +1,15 @@
-void setup() {
-  Serial.begin(9600); 
+
+void setupArduino() {
+  Serial.begin(9600);
+  setupMotorPins();
 }
 
-void loop() {
-  if (Serial.available() > 0) {           
-    String commandStr = Serial.readStringUntil('\n');  
-    int command = commandStr.toInt();                  
+void loopArduino() {
+  if (Serial.available() > 0) {
+    String commandStr = Serial.readStringUntil('\n');
+    int command = commandStr.toInt();
 
-    if (command > 0) {                   
+    if (command > 0) {
       switch (command) {
         case 1:
           Serial.println("Maju");
@@ -27,11 +29,7 @@ void loop() {
           delay(500);
           break;
 
-        case 4;
-          Serial.println("mundur");
-          Motormundur();
-          delay(500);
-          break;  
+        // Tambahkan perintah lain jika diperlukan
 
         default:
           Serial.println("Perintah tidak dikenali");
@@ -39,7 +37,7 @@ void loop() {
           break;
       }
     }
-    
+
     while (Serial.available() > 0) {
       Serial.read();
     }
