@@ -29,8 +29,6 @@ void loopArduino() {
           delay(500);
           break;
 
-        // Tambahkan perintah lain jika diperlukan
-
         default:
           Serial.println("Perintah tidak dikenali");
           Motorstop();
