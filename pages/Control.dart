@@ -22,6 +22,7 @@ class DpadControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:  Color.fromARGB(255, 181, 179, 179),
       appBar: AppBar(title: Text('D-pad Control')),
       body: Center(
         child: Column(
