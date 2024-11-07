@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import '../providers/auth.dart' as MyAuth; 
+import '../providers/auth.dart' as MyAuth;
 
 class LoginPage extends StatelessWidget {
   final MyAuth.Auth auth = MyAuth.Auth();
@@ -8,7 +8,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'MyApp',
+      title: 'ROBOCORN',
+      logo: AssetImage('/home/falih-taufiqul-hakim/Documents/Mobile/2/flutter_application_1/lib/assets/logo.png'), // Sesuaikan path logo di dalam folder assets
       onLogin: _authenticateUser,
       onSignup: _registerUser,
       onRecoverPassword: _recoverPassword,
@@ -16,8 +17,8 @@ class LoginPage extends StatelessWidget {
         Navigator.of(context).pushReplacementNamed('/home');
       },
       theme: LoginTheme(
-        primaryColor: Colors.blue,
-        accentColor: Colors.white,
+        primaryColor: const Color.fromARGB(255, 61, 59, 59),
+        accentColor: Colors.orange,
       ),
     );
   }
