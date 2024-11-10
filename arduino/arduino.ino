@@ -2,6 +2,7 @@
 void setup() {
   Serial.begin(9600);
   setupMotorPins();
+  setupServo();
 }
 
 void loop() {
@@ -11,25 +12,32 @@ void loop() {
 
     if (command > 0) {
       switch (command) {
+
         case 1:
           Serial.println("Maju");
           Motormaju();
-          delay(500);
           break;
 
         case 2:
           Serial.println("Kanan");
           Motorkanan();
-          delay(500);
           break;
 
         case 3:
           Serial.println("Kiri");
           Motorkiri();
-          delay(500);
           break;
 
-        // Tambahkan perintah lain jika diperlukan
+        case 4:
+          Serial.println("Stop");
+          Motorstop();
+          break;
+
+        case 5:
+          Serial.println("Bercocok");
+          Lubang();
+          break;
+
 
         default:
           Serial.println("Perintah tidak dikenali");
