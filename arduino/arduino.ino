@@ -23,6 +23,7 @@ void loop() {
 
     if (command > 0) {
       switch (command) {
+
         case 1:
           beep();
           Serial.println("Maju");
@@ -32,6 +33,7 @@ void loop() {
           break;
 
         case 2:
+          beep();
           Serial.println("Kanan");
           lcd.setCursor(0, 1);
           lcd.print("Kanan    ");
@@ -39,6 +41,7 @@ void loop() {
           break;
 
         case 3:
+          beep();
           Serial.println("Kiri");
           lcd.setCursor(0, 1);
           lcd.print("Kiri     ");
@@ -46,6 +49,7 @@ void loop() {
           break;
 
         case 4:
+          beep();
           Serial.println("Stop");
           lcd.setCursor(0, 1);
           lcd.print("Stop     ");
@@ -53,13 +57,11 @@ void loop() {
           break;
 
         case 5:
+          beep();
           Serial.println("Melubangi");
           lcd.setCursor(0, 1);
           lcd.print("Melubangi");
           Lubang();
-          break;
-
-        case 6:
           beep();
           Serial.println("Bercocok");
           lcd.setCursor(0, 1);
@@ -84,7 +86,7 @@ void loop() {
 
 void beep(){
   digitalWrite(buzzerPin, HIGH);
-  delay(15);
+  delay(30);
   digitalWrite(buzzerPin, LOW);
   delay(15);
 }
