@@ -28,11 +28,18 @@ untuk backendnya ini kita pakai firebase.
 
 untuk mendapatkan ip dari nodemcu bisa run codingan dari nodemcu itu nanti akan muncul di serial monitor.
 
-Motorstop : fungsi untuk mengstop motor.
-Motormaju : fungsi untuk menjalankan kedua motor.
-Motorkanan : fungsi untuk menjalankan motor kiri saja.
-Motorkiri : fungsi untuk menjalankan motor kanan saja.
-Motormundur : fungsi untuk memundurkan motor.
-Lubang : fungsi untuk menggerakkan servo 1.
-Benih : fungsi untuk menggerakkan servo 2.
-beep : fungsi untuk menyalakan buzzer. 
+`Motorstop` fungsi untuk mengstop motor.
+
+`Motormaju` fungsi untuk menjalankan kedua motor.
+
+`Motorkanan` fungsi untuk menjalankan motor kiri saja.
+
+`Motorkiri` fungsi untuk menjalankan motor kanan saja.
+
+`Motormundur` fungsi untuk memundurkan motor.
+
+`Lubang` fungsi untuk menggerakkan servo 1.
+
+`Benih` fungsi untuk menggerakkan servo 2.
+
+`beep` fungsi untuk menyalakan buzzer.
