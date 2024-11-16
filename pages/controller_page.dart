@@ -3,15 +3,40 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class Control extends StatefulWidget {
+  final String serverIP; // Menambahkan parameter serverIP
+
+  // Konstruktor menerima serverIP
+  Control({required this.serverIP});
+
   @override
   _ControlState createState() => _ControlState();
 }
 
 class _ControlState extends State<Control> {
-  // Deklarasi IP server ESP8266
-  final String serverIP = "192.168.4.1";
+  late String serverIP;
+  TextEditingController _ipController = TextEditingController(); // Menambahkan controller untuk input IP
 
-  // Fungsi untuk mengirim perintah ke ESP8266
+  @override
+  void initState() {
+    super.initState();
+    serverIP = widget.serverIP; // Menyimpan nilai IP yang diterima
+  }
+
+  @override
+  void dispose() {
+    _ipController.dispose(); // Pastikan untuk dispose controller saat halaman dihapus
+    super.dispose();
+  }
+
+  // Fungsi untuk mengupdate IP
+  void _updateServerIP() {
+    setState(() {
+      serverIP = _ipController.text; // Mengambil IP dari text controller
+    });
+    print('Server IP updated to: $serverIP');
+  }
+
+  // Fungsi untuk mengirim perintah ke server
   Future<void> sendCommand(int command) async {
     final url = Uri.parse('http://$serverIP/command?value=$command');
     try {
@@ -26,241 +51,178 @@ class _ControlState extends State<Control> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Mengatur orientasi menjadi landscape
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
-  }
-
-  @override
-  void dispose() {
-    // Mengembalikan orientasi ke default (potrait) saat halaman ditutup
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    super.dispose();
-  }
-
-  // Opacity gambar saat disentuh
   double _opacityKiri = 1.0;
   double _opacityKanan = 1.0;
   double _opacityAtas = 1.0;
   double _opacityBawah = 1.0;
-  double _opacityLogo = 1.0;
 
-  // Fungsi untuk mengurangi opacity saat gambar disentuh
-  void _onTapDownKiri() {
+  void _onTapDown(String direction) {
     setState(() {
-      _opacityKiri = 0.5; // Mengurangi opacity saat disentuh
+      switch (direction) {
+        case 'kiri':
+          _opacityKiri = 0.5;
+          break;
+        case 'kanan':
+          _opacityKanan = 0.5;
+          break;
+        case 'atas':
+          _opacityAtas = 0.5;
+          break;
+        case 'bawah':
+          _opacityBawah = 0.5;
+          break;
+      }
     });
   }
 
-  void _onTapUpKiri() {
+  void _onTapUp(String direction) {
     setState(() {
-      _opacityKiri = 1.0; // Kembalikan ke opacity normal saat dilepaskan
+      switch (direction) {
+        case 'kiri':
+          _opacityKiri = 1.0;
+          break;
+        case 'kanan':
+          _opacityKanan = 1.0;
+          break;
+        case 'atas':
+          _opacityAtas = 1.0;
+          break;
+        case 'bawah':
+          _opacityBawah = 1.0;
+          break;
+      }
     });
-  }
-
-  void _onTapDownKanan() {
-    setState(() {
-      _opacityKanan = 0.5; // Mengurangi opacity saat disentuh
-    });
-  }
-
-  void _onTapUpKanan() {
-    setState(() {
-      _opacityKanan = 1.0; // Kembalikan ke opacity normal saat dilepaskan
-    });
-  }
-
-  void _onTapDownAtas() {
-    setState(() {
-      _opacityAtas = 0.5; // Mengurangi opacity saat disentuh
-    });
-  }
-
-  void _onTapUpAtas() {
-    setState(() {
-      _opacityAtas = 1.0; // Kembalikan ke opacity normal saat dilepaskan
-    });
-  }
-
-  void _onTapDownBawah() {
-    setState(() {
-      _opacityBawah = 0.5; // Mengurangi opacity saat disentuh
-    });
-  }
-
-  void _onTapUpBawah() {
-    setState(() {
-      _opacityBawah = 1.0; // Kembalikan ke opacity normal saat dilepaskan
-    });
-  } // Opacity awal logo
-
-  void _onTapDownLogo() {
-    setState(() {
-      _opacityLogo = 0.5; // Ubah opacity menjadi 50% saat ditekan
-    });
-  }
-
-  void _onTapUpLogo() {
-    setState(() {
-      _opacityLogo = 1.0; // Kembalikan opacity ke 100% saat dilepas
-    });
+    sendCommand(0); // Kirim perintah 0 untuk menghentikan gerakan
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Row(
-          children: [
-            // Setengah kiri (Hitam)
-            Expanded(
-              flex: 1,
-              child: Container(
-                height: 480, // Mengatur tinggi container
-                color: Color(0xFFF19000),
-                child: Stack(
-                  children: [
-                    // Konten utama yang sudah ada sebelumnya (Row)
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Gambar pertama di sebelah kiri dengan efek opacity
-                          GestureDetector(
-                            onTapDown: (_) => _onTapDownKiri(),
-                            onTapUp: (_) => _onTapUpKiri(),
-                            onTapCancel: _onTapUpKiri,
-                            onTap: () {
-                              // Tambahkan aksi di sini seperti onPressed
-                              _onTapUpKiri(); // Kembalikan opacity ke normal
-                              sendCommand(
-                                  3); // Kirim perintah ke ESP8266 untuk "kiri"
-                            },
-                            child: Opacity(
-                              opacity: _opacityKiri,
-                              child: Image.asset(
-                                'assets/kiri3.png',
-                                width: 190,
-                                height: 360,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 20), // Jarak antar gambar
-                          // Gambar kedua di sebelah kanan dengan efek opacity
-                          GestureDetector(
-                            onTapDown: (_) => _onTapDownKanan(),
-                            onTapUp: (_) => _onTapUpKanan(),
-                            onTapCancel: _onTapUpKanan,
-                            onTap: () {
-                              // Tambahkan aksi di sini seperti onPressed
-                              _onTapUpKiri(); // Kembalikan opacity ke normal
-                              sendCommand(
-                                  2); // Kirim perintah ke ESP8266 untuk "kiri"
-                            },
-                            child: Opacity(
-                              opacity: _opacityKanan,
-                              child: Image.asset(
-                                'assets/kanan3.png',
-                                width: 190,
-                                height: 360,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Gambar logo dengan efek opacity saat disentuh
-                    Positioned(
-                      top: 20,
-                      left: 20,
-                      child: GestureDetector(
-                        onTapDown: (_) => _onTapDownLogo(),
-                        onTapUp: (_) => _onTapUpLogo(),
-                        onTapCancel: _onTapUpLogo,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Control Page'),
+        backgroundColor: Color(0xFF3F3F3F),
+      ),
+      body: Column(
+        children: [
+          // Input field untuk Server IP
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _ipController,
+              decoration: InputDecoration(
+                labelText: 'Enter Server IP',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              onSubmitted: (value) {
+                _updateServerIP(); // Update IP ketika tombol submit ditekan
+              },
+            ),
+          ),
+          // Tombol untuk mengupdate IP
+          ElevatedButton(
+            onPressed: _updateServerIP,
+            child: Text('Update IP'),
+          ),
+          // Kontrol pergerakan
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  height: 480,
+                  color: Color(0xFFF19000),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTapDown: (_) => _onTapDown('kiri'),
+                        onTapUp: (_) => _onTapUp('kiri'),
+                        onTapCancel: () => _onTapUp('kiri'),
+                        onTap: () {
+                          sendCommand(3); // Kirim perintah gerakan kiri
+                        },
                         child: Opacity(
-                          opacity: _opacityLogo,
+                          opacity: _opacityKiri,
                           child: Image.asset(
-                            'assets/funnel.png', // Ganti dengan path gambar Anda
-                            width: 80, // Sesuaikan ukuran logo
-                            height: 80,
+                            '/home/falih-taufiqul-hakim/Documents/Mobile/2/flutter_application_1/lib/assets/kiri3.png',
+                            width: 190,
+                            height: 360,
                             fit: BoxFit.contain,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // Setengah kanan (Merah)
-            Expanded(
-              flex: 1,
-              child: Container(
-                color: Color(0xFF3F3F3F), // Warna latar belakang
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Gambar pertama di bagian atas dengan efek opacity saat disentuh
-                    GestureDetector(
-                      onTapDown: (_) => _onTapDownAtas(), // Saat gambar ditekan
-                      onTapUp: (_) => _onTapUpAtas(), // Saat gambar dilepaskan
-                      onTapCancel: _onTapUpAtas, // Jika tindakan dibatalkan
-                      onTap: () {
-                        // Tambahkan aksi di sini seperti onPressed
-                        _onTapUpKiri(); // Kembalikan opacity ke normal
-                        sendCommand(
-                            1); // Kirim perintah ke ESP8266 untuk "kiri"
-                      },
-                      child: Opacity(
-                        opacity: _opacityAtas, // Mengubah opacity sesuai state
-                        child: Image.asset(
-                          'assets/atas3.png', // Gambar pertama
-                          width: 350,
-                          height: 200,
-                          fit: BoxFit.contain, // Menyesuaikan gambar
+                      SizedBox(width: 20),
+                      GestureDetector(
+                        onTapDown: (_) => _onTapDown('kanan'),
+                        onTapUp: (_) => _onTapUp('kanan'),
+                        onTapCancel: () => _onTapUp('kanan'),
+                        onTap: () {
+                          sendCommand(2); // Kirim perintah gerakan kanan
+                        },
+                        child: Opacity(
+                          opacity: _opacityKanan,
+                          child: Image.asset(
+                            '/home/falih-taufiqul-hakim/Documents/Mobile/2/flutter_application_1/lib/assets/kanan3.png',
+                            width: 190,
+                            height: 360,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
-                    ), // Jarak antar gambar secara vertikal
-                    // Gambar kedua tepat di bawah gambar pertama dengan efek opacity saat disentuh
-                    GestureDetector(
-                      onTapDown: (_) =>
-                          _onTapDownBawah(), // Saat gambar ditekan
-                      onTapUp: (_) => _onTapUpBawah(), // Saat gambar dilepaskan
-                      onTapCancel: _onTapUpBawah, // Jika tindakan dibatalkan
-                      onTap: () {
-                        // Tambahkan aksi di sini seperti onPressed
-                        _onTapUpKiri(); // Kembalikan opacity ke normal
-                        sendCommand(
-                            0); // Kirim perintah ke ESP8266 untuk "kiri"
-                      },
-                      child: Opacity(
-                        opacity: _opacityBawah, // Mengubah opacity sesuai state
-                        child: Image.asset(
-                          'assets/bawah3.png', // Gambar kedua
-                          width: 350,
-                          height: 200,
-                          fit: BoxFit.contain, // Menyesuaikan gambar
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  color: Color(0xFF3F3F3F),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTapDown: (_) => _onTapDown('atas'),
+                        onTapUp: (_) => _onTapUp('atas'),
+                        onTapCancel: () => _onTapUp('atas'),
+                        onTap: () {
+                          sendCommand(1); // Kirim perintah gerakan atas
+                        },
+                        child: Opacity(
+                          opacity: _opacityAtas,
+                          child: Image.asset(
+                            '/home/falih-taufiqul-hakim/Documents/Mobile/2/flutter_application_1/lib/assets/atas3.png',
+                            width: 350,
+                            height: 200,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTapDown: (_) => _onTapDown('bawah'),
+                        onTapUp: (_) => _onTapUp('bawah'),
+                        onTapCancel: () => _onTapUp('bawah'),
+                        onTap: () {
+                          sendCommand(4); // Kirim perintah gerakan bawah
+                        },
+                        child: Opacity(
+                          opacity: _opacityBawah,
+                          child: Image.asset(
+                            '/home/falih-taufiqul-hakim/Documents/Mobile/2/flutter_application_1/lib/assets/bawah3.png',
+                            width: 350,
+                            height: 200,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
