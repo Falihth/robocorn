@@ -20,6 +20,10 @@ komponen yang digunakan di robot ini diantaranya :
 - Servo 2 pcs
 - Buzzer Piezo
 - Lcd I2C
-- MPU6050 (coming soon kalau mau otomatis untuk sekarang full manual)
+- MPU6050 (coming soon kalau mau full otomatis untuk sekarang full manual)
 
 Keterangan untuk driver L298N sudah ada stepdownnya jadi tidak usah butuh komponen stepdown tambahan untuk menurunkan tegangan.
+
+untuk backendnya ini kita pakai firebase.
+
+untuk mendapatkan ip dari nodemcu bisa run codingan dari nodemcu itu nanti akan muncul di serial monitor.
