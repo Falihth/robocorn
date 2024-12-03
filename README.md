@@ -11,7 +11,7 @@ Contributor:
 folder pages, providers, dan file main.dart adalah file dan folder untuk flutter.
 
 dan folder arduino dan nodemcu adalah isi dari program untuk arduino dan nodemcunya.
-
+tal
 komponen yang digunakan di robot ini diantaranya :
 - Arduino Uno
 - Nodemcu
@@ -43,3 +43,8 @@ untuk mendapatkan ip dari nodemcu bisa run codingan dari nodemcu itu nanti akan 
 `Benih` fungsi untuk menggerakkan servo 2.
 
 `beep` fungsi untuk menyalakan buzzer.
+
+
+*UPDATE* :
+update tentang tegangan untuk stepdown dari driver spesifikasi arus maksimum sebesar 2A dan total arus yang dibutuhkan cukup besar dikarnakan saya ganti ke serv0 mg99r jika saya masih pake stepdown dari driver maka arus dari tegangan tidak stabil dan akhirnya saya pake stepdown lm2596 yang memiliki spek arus maksimum sebesar 3A.
+
